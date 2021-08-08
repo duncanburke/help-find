@@ -6,7 +6,7 @@
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.1") (dash "2.12"))
 ;; Keywords: help
-;; Homepage:
+;; Homepage: https://github.com/duncanburke/help-find
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 ;;; Commentary:
 
 ;; help-find.el provides two functions, `help-find-keybinding` and
-;; `help-find-function` which search the global `objarray` for all keymaps
+;; `help-find-function` which search the global `obarray` for all keymaps
 ;; which have that key sequence and function bound, respectively.
 
 ;;; Code:
@@ -38,8 +38,11 @@
 
 ;;;###autoload
 (defun help-find-keybinding (keys)
-  "Display all keymaps containing a binding to KEYS.
-Keys is in `kbd' format."
+  "Display all keymaps containing a binding for the key sequence KEYS.
+KEYS is in `kbd' format. This searches all keymaps in the global
+`obarray'.  Note that this will also find prefix keymaps, as
+there is no way for it to know which keymaps will result in
+top-level bindings."
   (interactive "MFind keybinding (kbd format): ")
   (let ((key-seq (kbd keys))
         (keymaps))
@@ -99,7 +102,8 @@ Keys is in `kbd' format."
 
 ;;;###autoload
 (defun help-find-function (fn)
-  "Display all keymaps containing a binding to the function FN."
+  "Display all keymaps containing a binding to the function FN.
+This searches all keymaps in the global `obarray'."
   (interactive "aFind function: ")
   (message "help-find-function %s %s %s" fn (stringp fn) (symbolp fn))
   (let ((bindings (help-find--keymaps-lookup-function fn)))
