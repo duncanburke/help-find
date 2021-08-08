@@ -70,34 +70,33 @@ top-level bindings."
           (princ "-------\n")
           (--map
            (progn
-             (let ((keymap-file-name (find-lisp-object-file-name it 'defvar)))
-               (insert-text-button (symbol-name it)
-                                   'type 'help-find-keymap
-                                   'help-args (list it))
-               (indent-to 40 1)
-               (let ((lookup (lookup-key (symbol-value it) key-seq)))
+             (insert-text-button (symbol-name it)
+                                 'type 'help-find-keymap
+                                 'help-args (list it))
+             (indent-to 40 1)
+             (let ((lookup (lookup-key (symbol-value it) key-seq)))
+               (cond
+                ((symbolp lookup)
                  (cond
-                  ((symbolp lookup)
-                   (cond
-                    ((keymapp lookup)
-                     (insert-text-button (symbol-name lookup)
-                                         'type 'help-find-keymap
-                                         'help-args (list lookup)))
-                    ((functionp lookup)
-                     (insert-text-button (symbol-name lookup)
-                                         'type 'help-function
-                                         'help-args (list lookup)))
-                    (t
-                     (insert-text-button (symbol-name lookup)
-                                         'type 'help-symbol
-                                         'help-args (list lookup)))))
+                  ((keymapp lookup)
+                   (insert-text-button (symbol-name lookup)
+                                       'type 'help-find-keymap
+                                       'help-args (list lookup)))
+                  ((functionp lookup)
+                   (insert-text-button (symbol-name lookup)
+                                       'type 'help-function
+                                       'help-args (list lookup)))
                   (t
-                   (cond
-                    ((keymapp lookup)
-                     (princ "Prefix Command"))
-                    (t
-                     (princ "??"))))))
-               (princ "\n")))
+                   (insert-text-button (symbol-name lookup)
+                                       'type 'help-symbol
+                                       'help-args (list lookup)))))
+                (t
+                 (cond
+                  ((keymapp lookup)
+                   (princ "Prefix Command"))
+                  (t
+                   (princ "??"))))))
+             (princ "\n"))
            keymaps))))))
 
 ;;;###autoload
