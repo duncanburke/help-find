@@ -4,7 +4,7 @@
 
 ;; Author: Duncan Burke <duncankburke@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.1") (dash "2.12"))
+;; Package-Requires: ((emacs "24.1") (dash "2.12."))
 ;; Keywords: help
 ;; Homepage: https://github.com/duncanburke/help-find
 
@@ -150,7 +150,7 @@ This searches all keymaps in the global `obarray'."
     bindings))
 
 (defun help-find--keymap-lookup-function (keymap fn)
-  "Search KEYMAP for FN, recursively. FN should be a symbol."
+  "Search KEYMAP for FN, recursively.  FN should be a symbol."
   (let ((bindings))
     (map-keymap
      (lambda (ev binding)
