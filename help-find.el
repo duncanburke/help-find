@@ -134,15 +134,15 @@ Keys is in `kbd' format."
 (defun help-find--keymaps-lookup-function (fn)
   "Search for FN in all known keymaps."
   (let ((bindings))
-    (mapatoms (lambda (ob) (when (and (boundp ob)
-                                      (keymapp (symbol-value ob))
-                                      (eq (intern (symbol-name ob)) ob)
-                                      )
-                             (let ((keymap-bindings (help-find--keymap-lookup-function
-                                                     (symbol-value ob) fn)))
-                               (when keymap-bindings
-                                 (push (cons ob keymap-bindings)
-                                       bindings)))))
+    (mapatoms (lambda (ob)
+                (when (and (boundp ob)
+                           (keymapp (symbol-value ob))
+                           (eq (intern (symbol-name ob)) ob))
+                  (let ((keymap-bindings (help-find--keymap-lookup-function
+                                          (symbol-value ob) fn)))
+                    (when keymap-bindings
+                      (push (cons ob keymap-bindings)
+                            bindings)))))
               obarray)
     bindings))
 
@@ -159,7 +159,8 @@ Keys is in `kbd' format."
           ((and (boundp binding)
             (keymapp (symbol-value binding)))
            (push (--map (cons ev it)
-                        (help-find--keymap-lookup-function (symbol-value binding) fn))
+                        (help-find--keymap-lookup-function
+                         (symbol-value binding) fn))
                  bindings))))
         ((keymapp binding)
          (push (--map (cons ev it)
