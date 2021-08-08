@@ -48,10 +48,10 @@ top-level bindings."
         (keymaps))
     (mapatoms (lambda (ob) (when (and (boundp ob)
                                       (keymapp (symbol-value ob))
-                             (let ((lookup (lookup-key (symbol-value ob) key-seq)))
-                               (when (and lookup
-                                          (not (numberp lookup)))
-                                 (push ob keymaps)))))))
+                                      (let ((lookup (lookup-key (symbol-value ob) key-seq)))
+                                        (when (and lookup
+                                                   (not (numberp lookup)))
+                                          (push ob keymaps)))))))
     (if (< (length keymaps) 1)
         (message "%s not found in any keymap." keys)
       (help-setup-xref (list #'help-find-keybinding keys)
