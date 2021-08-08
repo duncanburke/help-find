@@ -1,4 +1,33 @@
-;; -*- lexical-binding: t; -*-
+;;; help-find.el --- Additional help functions for working with keymaps  -*- lexical-binding: t -*-
+
+;; Copyright (C) 2021 Free Software Foundation, Inc.
+
+;; Author: Duncan Burke <duncankburke@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24.1") (dash "2.12"))
+;; Keywords: help
+;; Homepage:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; help-find.el provides two functions, `help-find-keybinding` and
+;; `help-find-function` which search the global `objarray` for all keymaps
+;; which have that key sequence and function bound, respectively.
+
+;;; Code:
 
 (require 'dash)
 
@@ -9,6 +38,8 @@
 
 ;;;###autoload
 (defun help-find-keybinding (keys)
+  "Display all keymaps containing a binding to KEYS.
+Keys is in `kbd' format."
   (interactive "MFind keybinding (kbd format): ")
   (let ((key-seq (kbd keys))
         (keymaps))
@@ -68,6 +99,7 @@
 
 ;;;###autoload
 (defun help-find-function (fn)
+  "Display all keymaps containing a binding to the function FN."
   (interactive "aFind function: ")
   (message "help-find-function %s %s %s" fn (stringp fn) (symbolp fn))
   (let ((bindings (help-find--keymaps-lookup-function fn)))
@@ -137,3 +169,4 @@
     (apply #'-concat bindings)))
 
 (provide 'help-find)
+;;; help-find.el ends here
