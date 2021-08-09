@@ -11,7 +11,7 @@ For example, if you want to change your `mode-specific-command-prefix` from `C-c
 ### With straight.el
 
 ```emacs-lisp
-(straight-use-package `(help-find :type git :repo "https://github.com/duncanburke/help-find"))
+(straight-use-package '(help-find :type git :host github :repo "duncanburke/help-find"))
 ```
 
 ## Setup
