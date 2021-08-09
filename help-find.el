@@ -30,6 +30,7 @@
 ;;; Code:
 
 (require 'dash)
+(require 'help-mode)
 
 (define-button-type 'help-find-keymap
   :supertype 'help-xref
@@ -129,7 +130,9 @@ This searches all keymaps in the global `obarray'."
                                   'type 'help-find-keymap
                                   'help-args (list (car it)))
               (indent-to 40 1)
-              (insert (help--key-description-fontified keys))
+              (insert (propertize (key-description keys)
+                                  'font-lock-face 'help-key-binding
+                                  'face 'help-key-binding))
               (princ "\n"))
             (cdr it))
            bindings))))))
