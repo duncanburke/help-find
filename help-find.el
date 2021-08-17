@@ -4,7 +4,7 @@
 
 ;; Author: Duncan Burke <duncankburke@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.1") (dash "2.12."))
+;; Package-Requires: ((emacs "25.2") (dash "2.12."))
 ;; Keywords: help
 ;; Homepage: https://github.com/duncanburke/help-find
 
@@ -34,8 +34,20 @@
 
 (define-button-type 'help-find-keymap
   :supertype 'help-xref
-  'help-function 'describe-keymap
+  'help-function (progn (require '+help-fns+ nil t)
+                        (if (symbol-function 'describe-keymap)
+                            'describe-keymap
+                          'describe-symbol))
   'help-echo (purecopy "mouse-2, RET: describe this keymap"))
+
+(defun help-find--insert-text-keybinding (keys)
+  "Insert text representing the keybinding KEYS. Whether it is
+propertized depends on the version of Emacs."
+  (if (symbol-plist 'help-key-binding)
+      (insert (propertize keys
+                          'face 'help-key-binding
+                          'font-lock-face 'help-key-binding))
+    (insert keys)))
 
 ;;;###autoload
 (defun help-find-keybinding (keys)
@@ -59,9 +71,7 @@ top-level bindings."
                        (called-interactively-p 'interactive))
       (with-help-window (help-buffer)
         (with-current-buffer standard-output
-          (insert (propertize keys
-                              'face 'help-key-binding
-                              'font-lock-face 'help-key-binding))
+          (help-find--insert-text-keybinding keys)
           (princ " found in the following keymaps:\n\n")
           (princ "keymap")
           (indent-to 40)
@@ -130,9 +140,7 @@ This searches all keymaps in the global `obarray'."
                                   'type 'help-find-keymap
                                   'help-args (list (car it)))
               (indent-to 40 1)
-              (insert (propertize (key-description keys)
-                                  'font-lock-face 'help-key-binding
-                                  'face 'help-key-binding))
+              (help-find--insert-text-keybinding (key-description keys))
               (princ "\n"))
             (cdr it))
            bindings))))))
