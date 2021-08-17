@@ -115,7 +115,6 @@ top-level bindings."
   "Display all keymaps containing a binding to the function FN.
 This searches all keymaps in the global `obarray'."
   (interactive "aFind function: ")
-  (message "help-find-function %s %s %s" fn (stringp fn) (symbolp fn))
   (let ((bindings (help-find--keymaps-lookup-function fn)))
     (if (< (length bindings) 1)
         (message "%s not found in any keymap." fn)
