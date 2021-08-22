@@ -1,12 +1,14 @@
 ;;; help-find.el --- Additional help functions for working with keymaps  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021 Free Software Foundation, Inc.
+;; Copyright (C) 2021 Duncan Burke
 
 ;; Author: Duncan Burke <duncankburke@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.2") (dash "2.12."))
 ;; Keywords: help
 ;; Homepage: https://github.com/duncanburke/help-find
+
+;; This file is NOT part of GNU Emacs.
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
