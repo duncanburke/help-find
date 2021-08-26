@@ -36,7 +36,7 @@
 
 (define-button-type 'help-find-keymap
   :supertype 'help-xref
-  'help-function (progn (require '+help-fns+ nil t)
+  'help-function (progn (require 'help-fns+ nil t)
                         (if (symbol-function 'describe-keymap)
                             'describe-keymap
                           'describe-symbol))
