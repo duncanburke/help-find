@@ -176,6 +176,12 @@ This searches all keymaps in the global `obarray'."
            (push (--map (cons ev it)
                         (help-find--keymap-lookup-function
                          (symbol-value binding) fn))
+                 bindings))
+          ((and (fboundp binding)
+            (keymapp (symbol-function binding)))
+           (push (--map (cons ev it)
+                        (help-find--keymap-lookup-function
+                         (symbol-function binding) fn))
                  bindings))))
         ((keymapp binding)
          (push (--map (cons ev it)
