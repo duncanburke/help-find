@@ -43,8 +43,8 @@
   'help-echo (purecopy "mouse-2, RET: describe this keymap"))
 
 (defun help-find--insert-text-keybinding (keys)
-  "Insert text representing the keybinding KEYS. Whether it is
-propertized depends on the version of Emacs."
+  "Insert text representing the keybinding KEYS.
+Whether it is propertized depends on the version of Emacs."
   (if (symbol-plist 'help-key-binding)
       (insert (propertize keys
                           'face 'help-key-binding
@@ -54,7 +54,7 @@ propertized depends on the version of Emacs."
 ;;;###autoload
 (defun help-find-keybinding (keys)
   "Display all keymaps containing a binding for the key sequence KEYS.
-KEYS is in `kbd' format. This searches all keymaps in the global
+KEYS is in `kbd' format.  This searches all keymaps in the global
 `obarray'.  Note that this will also find prefix keymaps, as
 there is no way for it to know which keymaps will result in
 top-level bindings."
