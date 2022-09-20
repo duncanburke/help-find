@@ -165,28 +165,34 @@ This searches all keymaps in the global `obarray'."
   "Search KEYMAP for FN, recursively.  FN should be a symbol."
   (let ((bindings))
     (map-keymap
-     (lambda (ev binding)
-       (cond
-        ((symbolp binding)
+     (lambda (ev raw-binding)
+       ;; A binding can be a cons (DESCRIPTION . INNER-BINDING). If so, strip
+       ;; off the description.
+       (let ((binding
+              (if (and (consp raw-binding) (stringp (car raw-binding)))
+                  (cdr raw-binding)
+                raw-binding)))
          (cond
-          ((eq binding fn)
-           (push (list (list ev)) bindings))
-          ((and (boundp binding)
-            (keymapp (symbol-value binding)))
+          ((symbolp binding)
+           (cond
+            ((eq binding fn)
+             (push (list (list ev)) bindings))
+            ((and (boundp binding)
+                  (keymapp (symbol-value binding)))
+             (push (--map (cons ev it)
+                          (help-find--keymap-lookup-function
+                           (symbol-value binding) fn))
+                   bindings))
+            ((and (fboundp binding)
+                  (keymapp (symbol-function binding)))
+             (push (--map (cons ev it)
+                          (help-find--keymap-lookup-function
+                           (symbol-function binding) fn))
+                   bindings))))
+          ((keymapp binding)
            (push (--map (cons ev it)
-                        (help-find--keymap-lookup-function
-                         (symbol-value binding) fn))
-                 bindings))
-          ((and (fboundp binding)
-            (keymapp (symbol-function binding)))
-           (push (--map (cons ev it)
-                        (help-find--keymap-lookup-function
-                         (symbol-function binding) fn))
-                 bindings))))
-        ((keymapp binding)
-         (push (--map (cons ev it)
-                      (help-find--keymap-lookup-function binding fn))
-               bindings))))
+                        (help-find--keymap-lookup-function binding fn))
+                 bindings)))))
      keymap)
     (apply #'-concat bindings)))
 
