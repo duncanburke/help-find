@@ -3,7 +3,7 @@
 ;; Copyright (C) 2021 Duncan Burke
 
 ;; Author: Duncan Burke <duncankburke@gmail.com>
-;; Version: 0.0.2
+;; Version: 0.0.3
 ;; Package-Requires: ((emacs "25.2") (dash "2.12."))
 ;; Keywords: help
 ;; Homepage: https://github.com/duncanburke/help-find
