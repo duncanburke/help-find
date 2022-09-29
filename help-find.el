@@ -166,12 +166,19 @@ This searches all keymaps in the global `obarray'."
   (let ((bindings))
     (map-keymap
      (lambda (ev raw-binding)
-       ;; A binding can be a cons (DESCRIPTION . INNER-BINDING). If so, strip
-       ;; off the description.
        (let ((binding
-              (if (and (consp raw-binding) (stringp (car raw-binding)))
-                  (cdr raw-binding)
-                raw-binding)))
+              (pcase raw-binding
+                ((pred symbolp) raw-binding)
+                ((guard (keymapp raw-binding)) raw-binding)
+                (`(menu-item ,_ ,binding . ,_) binding)
+                (`(,_ menu-item . ,_) nil)
+                ((and `(,_ ,name  ,help . ,binding)
+                      (guard (and (stringp name) (stringp help))))
+                      binding)
+                ((and `(,_ ,name . ,binding)
+                      (guard (stringp name)))
+                 binding)
+                (`(,_ . ,binding) binding))))
          (cond
           ((symbolp binding)
            (cond
